@@ -65,7 +65,39 @@ document.addEventListener('DOMContentLoaded', () => {
             anchor.href = url.toString();
         } catch (_) { /* noop */ }
     }
-    document.querySelectorAll('a.checkout-link').forEach(appendUtmsToHref);
+    const checkoutProducts = {
+        'https://pay.wiapy.com/ovRNc2Mmr4Jr': {
+            name: 'Doenças Equinas — Plano Completo',
+            value: 27.90
+        },
+        'https://pay.wiapy.com/YmcfTfkO0cNM': {
+            name: 'Doenças Equinas — Plano Completo com Desconto',
+            value: 17.90
+        },
+        'https://pay.wiapy.com/5ZC1squumomY': {
+            name: 'Doenças Equinas — Plano Básico',
+            value: 10.00
+        }
+    };
+
+    document.querySelectorAll('a.checkout-link').forEach((checkoutLink) => {
+        appendUtmsToHref(checkoutLink);
+
+        const destination = new URL(checkoutLink.href);
+        const baseUrl = `${destination.origin}${destination.pathname}`;
+        const product = checkoutProducts[baseUrl];
+        if (!product) return;
+
+        checkoutLink.addEventListener('click', () => {
+            if (typeof window.fbq === 'function') {
+                window.fbq('track', 'InitiateCheckout', {
+                    content_name: product.name,
+                    value: product.value,
+                    currency: 'BRL'
+                });
+            }
+        });
+    });
 
     /* ==========================================================================
        UPSELL POPUP LOGIC
