@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     /* ==========================================================================
-       CHECKOUT LINKS: forward UTMs so native <a> clicks fire gtm.linkClick
+       CHECKOUT LINKS: preserva UTMs e registra o início do checkout
        ========================================================================== */
     function appendUtmsToHref(anchor) {
         if (!anchor || !anchor.href) return;
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnCloseUpsell) btnCloseUpsell.addEventListener('click', closeUpsell);
 
-    // The accept/decline links navigate natively (gtm.linkClick); just close the modal state on accept
+    // Os links de aceitar e recusar seguem para o checkout após fechar o modal.
     if (btnUpsellAccept) {
         btnUpsellAccept.addEventListener('click', () => {
             upsellModal.classList.remove('open');
